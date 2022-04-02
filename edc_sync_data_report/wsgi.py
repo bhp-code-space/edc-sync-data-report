@@ -1,6 +1,7 @@
 """
 WSGI config for edc_sync_data_report project.
 
+
 It exposes the WSGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
