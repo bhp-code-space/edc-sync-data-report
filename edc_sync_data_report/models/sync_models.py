@@ -24,7 +24,11 @@ class SearchSlugModelMixin(Base):
 
 class SyncModels(SearchSlugModelMixin, BaseUuidModel):
 
-    cls_name = models.CharField(
+    app_label = models.CharField(
+        verbose_name="App label",
+        max_length=100, blank=False)
+
+    model_name = models.CharField(
         verbose_name="class reference absolute path",
         max_length=200, blank=False)
 
@@ -41,16 +45,15 @@ class SyncModels(SearchSlugModelMixin, BaseUuidModel):
         blank=True)
 
     def __str__(self):
-        return f'{self.cls_name}'
+        return f'{self.model_name}'
 
     def natural_key(self):
-        return self.cls_name
+        return self.model_name
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
-        fields.append('cls_name')
+        fields.append('model_name')
         return fields
 
     class Meta:
         app_label = 'edc_sync_data_report'
-
