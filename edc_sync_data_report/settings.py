@@ -24,7 +24,15 @@ APP_NAME = 'edc_sync_data_report'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '382#m4^^*i%v29n51k*e42^*%)2!us^or!)-)lvt%3lmgr^df_'
 
+SITE_ID = 40
 
+DEFAULT_STUDY_SITE = 40
+
+REVIEWER_SITE_ID = 1
+
+LOGIN_REDIRECT_URL = 'home_url'
+
+INDEX_PAGE = 'edc_sync_data_report.bhp.org.bw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -41,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'django_extensions',
     
     'edc_dashboard.apps.AppConfig',
     'edc_device.apps.AppConfig',
