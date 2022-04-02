@@ -5,8 +5,10 @@ from edc_base.model_mixins import BaseUuidModel
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
 
+from edc_sync_data_report.models.sync_site import SyncSite
 
-class SyncSiteManager(SearchSlugManager, models.Manager):
+
+class SyncAPIsManager(SearchSlugManager, models.Manager):
 
     def get_by_natural_key(self, identifier):
         return self.get(identifier=identifier)
@@ -22,43 +24,36 @@ class SearchSlugModelMixin(Base):
         abstract = True
 
 
-class SyncSite(SearchSlugModelMixin, BaseUuidModel):
+class SyncAPIs(SearchSlugModelMixin, BaseUuidModel):
 
     # identifier_cls = ExportIdentifier
 
-    identifier = models.CharField(
-        verbose_name="Site Identifier",
+    sync_site = models.ForeignKey(SyncSite,
+                               on_delete=models.CASCADE,
+                               related_name="site")
+
+    name = models.CharField(
+        verbose_name="Name of API",
+        max_length=36)
+
+    uri = models.CharField(
+        verbose_name="URI",
         max_length=36,
         unique=True,
         editable=False)
 
-    study = models.CharField(
+    http_method = models.CharField(
         max_length=100, blank=True,
-        default='flourish')
+        default='HTTP Request Method')
 
-    description = models.CharField(max_length=255, blank=True)
-
-    server = models.CharField(max_length=15, blank=True)
-
-    valid_from = models.DateField(
-        verbose_name="Report start date",
-        null=True,
-        blank=True)
-
-    valid_to = models.DateField(
-        verbose_name="Report start date",
-        null=True,
-        blank=True)
+    parameters = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return f'{self.identifier}'
-
-    def natural_key(self):
-        return self.identifier
+        return f'{self.name}'
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
-        fields.append('identifier')
+        fields.append('name')
         return fields
 
     class Meta:

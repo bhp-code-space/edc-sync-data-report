@@ -22,23 +22,13 @@ class SearchSlugModelMixin(Base):
         abstract = True
 
 
-class SyncSite(SearchSlugModelMixin, BaseUuidModel):
+class SyncStudy(SearchSlugModelMixin, BaseUuidModel):
 
-    # identifier_cls = ExportIdentifier
-
-    identifier = models.CharField(
-        verbose_name="Site Identifier",
-        max_length=36,
-        unique=True,
-        editable=False)
-
-    study = models.CharField(
-        max_length=100, blank=True,
-        default='flourish')
+    study_name = models.CharField(
+        verbose_name="class reference absolute path",
+        max_length=200, blank=False)
 
     description = models.CharField(max_length=255, blank=True)
-
-    server = models.CharField(max_length=15, blank=True)
 
     valid_from = models.DateField(
         verbose_name="Report start date",
@@ -51,14 +41,14 @@ class SyncSite(SearchSlugModelMixin, BaseUuidModel):
         blank=True)
 
     def __str__(self):
-        return f'{self.identifier}'
+        return f'{self.study_name}'
 
     def natural_key(self):
-        return self.identifier
+        return self.study_name
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
-        fields.append('identifier')
+        fields.append('study_name')
         return fields
 
     class Meta:
