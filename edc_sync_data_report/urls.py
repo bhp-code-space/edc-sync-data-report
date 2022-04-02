@@ -13,9 +13,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.generic.base import RedirectView
+
+from edc_identifier.admin_site import edc_identifier_admin
+
+from .views import HomeView, AdministrationView
+
+app_name = 'flourish_follow'
 
 urlpatterns = [
+    path('accounts/', include('edc_base.auth.urls')),
+    path('admin/', include('edc_base.auth.urls')),
+
     path('admin/', admin.site.urls),
+    path('admin/', edc_identifier_admin.urls),
+    path('administration/', AdministrationView.as_view(),
+         name='administration_url'),
+    path('edc_base/', include('edc_base.urls')),
+    path('edc_device/', include('edc_device.urls')),
+    path('edc_protocol/', include('edc_protocol.urls')),
+    path('home/', HomeView.as_view(), name='home_url'),
+    path('', HomeView.as_view(), name='home_url'),
+
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
