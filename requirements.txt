@@ -9,3 +9,4 @@ git+https://github.com/botswana-harvard/edc-protocol.git@develop#egg=edc_protoco
 git+https://github.com/botswana-harvard/edc-search.git@develop#egg=edc_search
 git+https://github.com/botswana-harvard/edc-identifier.git@develop#egg=edc_identifier
 django-extensions
+djangorestframework
