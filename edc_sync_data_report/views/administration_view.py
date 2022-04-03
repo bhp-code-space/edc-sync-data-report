@@ -7,5 +7,5 @@ from edc_navbar import NavbarViewMixin
 class AdministrationView(EdcBaseViewMixin, NavbarViewMixin,
                          AdministrationViewMixin, TemplateView):
 
-    navbar_name = 'flourish'
+    navbar_name = 'data report'
     navbar_selected_item = 'administration'
