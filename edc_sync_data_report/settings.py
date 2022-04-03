@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+SITE_ID = 40
+
 APP_NAME = 'edc_sync_data_report_study_'
 
 from pathlib import Path
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'edc_sync_data_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'rest_framework'

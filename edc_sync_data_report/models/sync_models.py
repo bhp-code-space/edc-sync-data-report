@@ -1,7 +1,7 @@
 from django.db import models
 from edc_base.model_mixins import BaseUuidModel
 
-# from edc_base.sites import SiteModelMixin
+from edc_base.sites import SiteModelMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
 
@@ -22,7 +22,7 @@ class SearchSlugModelMixin(Base):
         abstract = True
 
 
-class SyncModels(SearchSlugModelMixin, BaseUuidModel):
+class SyncModels(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 
     app_label = models.CharField(
         verbose_name="App label",
