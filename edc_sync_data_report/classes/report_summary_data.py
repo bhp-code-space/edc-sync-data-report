@@ -1,3 +1,4 @@
+from edc_sync_data_report.classes.row_data import RowData
 
 
 class ReportSummaryData:
@@ -17,9 +18,11 @@ class ReportSummaryData:
             server_value = self.server_summary_data.get(key)
             client_value = self.client_data.get(key)
             if server_value != client_value:
-                data = {f'{key}': {'client': client_value, 'server': server_value}}
-                not_matching.append(data)
+                row_data = RowData(model_name=key, server_value=server_value, client_value=client_value,
+                                   label="Matching")
+                not_matching.append(row_data)
             elif server_value == client_value:
-                data = {f'{key}': {'client': client_value, 'server': server_value}}
-                matching.append(data)
+                row_data = RowData(model_name=key, server_value=server_value, client_value=client_value,
+                                   label="Not matching")
+                matching.append(row_data)
         return matching, not_matching

@@ -1,307 +1,32 @@
 
-	<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
-
 
 	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 
-
-	<script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
   	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
   	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+
+
 	<script type="text/javascript">
-
-		function showHideDiv(ele) {
-                var srcElement = document.getElementById(ele);
-                if (srcElement != null) {
-                    if (srcElement.style.display == "block") {
-                        srcElement.style.display = 'none';
-                    }
-                    else {
-                        srcElement.style.display = 'block';
-                    }
-                    return false;
-                }
-        }
-		  google.charts.load('current', {'packages':['corechart']});
-		  google.charts.setOnLoadCallback(drawPieChart);
-
-		  function drawPieChart() {
-
-			var data = google.visualization.arrayToDataTable([
-			  ['Previous Study', 'Total'],
-			  ['Tshilo Dikotla', {{pie_chart.tshilo_dikotla|escapejs}}],
-			  ['Tshipidi',     {{pie_chart.tshipidi|escapejs}}],
-			  ['Mpepu',      {{pie_chart.mpepu|escapejs}}],
-			  ['Mashi',  {{pie_chart.mashi|escapejs}}],
-			  ['Mma Bana', {{pie_chart.mma_bana|escapejs}}],
-			]);
-
-			var options = {
-			  title: 'Infant Previous Study Data',
-			   pieHole: 0.4
-			};
-
-			var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-			chart.draw(data, options);
-		  }
-
-		  function drawChart() {
-		  	    const studies = {{previous_studies|safe}}
-		  	    console.log(studies);
-
-
-		  		const chart_items = {{locator_report|safe}}
-		  	    mma_bana_list = ['Mma Bana', chart_items[0][1], chart_items[1][1], chart_items[2][1]]
-		  	    tshipidi_list = ['Tshipidi', chart_items[0][2], chart_items[1][2], chart_items[2][2]]
-		  	    tshilo_dikotla_list = ['Tshilo Dikotla', chart_items[0][3], chart_items[1][3], chart_items[2][3]]
-		  	    mpepu_list = ['Mpepu', chart_items[0][4], chart_items[1][4], chart_items[2][4]]
-		  	    mashi_list = ['Mashi', chart_items[0][5], chart_items[1][5], chart_items[2][5]]
-		  	    // fixme use nested for
-		  	    const bar_chart_data = [['Study', 'Total Expected','Total Existing', 'Total Missing']];
-		  	    bar_chart_data.push(mma_bana_list);
-		  	    bar_chart_data.push(tshipidi_list);
-		  	    bar_chart_data.push(tshilo_dikotla_list);
-		  	    bar_chart_data.push(mpepu_list);
-				bar_chart_data.push(mashi_list);
-				console.log(bar_chart_data);
-
-		  		var data = google.visualization.arrayToDataTable(bar_chart_data);
-				var options = {
-				  chart: {
-					title: 'Locator Data'
-				  },
-				  bars: 'vertical' // Required for Material Bar Charts.
-				}
-
-				var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-				chart.draw(data, google.charts.Bar.convertOptions(options));
-      	  }
-
-		  google.charts.load('current', {'packages':['bar']});
-		  google.charts.setOnLoadCallback(drawChart);
-
-		  function drawStackBarChart(){
-
-		  		const chart_items = {{worklist_report|safe}}
-		  	    mma_bana_list = ['Mma Bana', chart_items[0][1], chart_items[1][1], chart_items[2][1], chart_items[3][1], chart_items[4][1]]
-		  	    tshipidi_list = ['Tshipidi', chart_items[0][2], chart_items[1][2], chart_items[2][2], chart_items[3][2], chart_items[4][2]]
-		  	    tshilo_dikotla_list = ['Tshilo Dikotla', chart_items[0][3], chart_items[1][3], chart_items[2][3], chart_items[3][3], chart_items[4][3]]
-		  	    mpepu_list = ['Mpepu', chart_items[0][4], chart_items[1][4], chart_items[2][4], chart_items[3][4], chart_items[4][4]]
-		  	    mashi_list = ['Mashi', chart_items[0][5], chart_items[1][5], chart_items[2][5], chart_items[3][5], chart_items[4][5]]
-
-		  	    const bar_chart_data = [['Study', 'Expected','Existing', 'Missing','Randomised', 'Not randomised']];
-		  	    bar_chart_data.push(mma_bana_list);
-		  	    bar_chart_data.push(tshipidi_list);
-		  	    bar_chart_data.push(tshilo_dikotla_list);
-		  	    bar_chart_data.push(mpepu_list);
-				bar_chart_data.push(mashi_list);
-				console.log(bar_chart_data);
-
-				var data = google.visualization.arrayToDataTable(bar_chart_data);
-				var options = {
-				  chart: {
-					title: 'Recruitment Data'
-				  },
-				  bars: 'vertical'
-				};
-
-				var chart = new google.charts.Bar(document.getElementById('barchart_material_1'));
-
-				chart.draw(data, google.charts.Bar.convertOptions(options));
-		  }
-
-		  google.charts.load('current', {'packages':['bar']});
-		  google.charts.setOnLoadCallback(drawStackBarChart);
-
-
-		  function drawAttemptsPieChart() {
-
-			var data = google.visualization.arrayToDataTable([
-			  ['All Studies', 'Total'],
-			  ['Total Attempts', {{total_attempts}}],
-			  ['Total not attempted', {{not_attempted}}]
-			]);
-
-			var options = {
-			  title: 'Total Attempts Pie Chart',
-			   pieHole: 0.4
-			};
-
-			var chart = new google.visualization.PieChart(document.getElementById('attempts_pie_chart'));
-
-			chart.draw(data, options);
-		  }
-
-		  google.charts.load('current', {'packages':['corechart']});
-		  google.charts.setOnLoadCallback(drawAttemptsPieChart);
-
-
-		  function drawCallingPieChart() {
-
-			var data = google.visualization.arrayToDataTable([
-			  ['Total attempts', 'Total'],
-			  ['Total Continued Contact', {{summary_pie.total_continued_contact}}],
-			  ['Total Decline/Uninterested', {{summary_pie.total_decline_uninterested}}],
-			  ['Total consented', {{summary_pie.total_consented}}],
-			  ['Total Unable to reach', {{summary_pie.total_unable_to_reach}}]
-			]);
-
-			var options = {
-			  title: 'Total Call Attempts Summary Pie Chart',
-			   pieHole: 0.4
-			};
-
-			var chart = new google.visualization.PieChart(document.getElementById('calling_piechart'));
-
-			chart.draw(data, options);
-		  }
-
-		  google.charts.load('current', {'packages':['corechart']});
-		  google.charts.setOnLoadCallback(drawCallingPieChart);
-
-		</script>
+		$(document).ready( function () {
+			$('#report_table').DataTable();
+		});
+	</script>
 <style>
-*{
-list-style: none;
-text-decoration: none;
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: 'Open Sans', sans-serif;
-}
-
-.sidebar {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background: rgb(5, 68, 104);
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-}
-
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 20px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidebar a:hover {
-  color: #f1f1f1;
-}
-
-.sidebar .closebtn {
-  position: absolute;
-  top: 30px;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-.openbtn {
-  font-size: 10px;
-  cursor: pointer;
-  background-color: #111;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-}
-
-.openbtn:hover {
-  background-color: #444;
-}
-
-#main {
-  transition: margin-left .5s;
-  padding: 16px;
-}
-
-.wrapper .sidebar ul li a{
-display: block;
-padding: 13px 30px;
-border-bottom: 1px solid #10558d;
-color: rgb(241, 237, 237);
-font-size: 16px;
-position: relative;
-}
-
-.wrapper .sidebar ul li a .icon{
-color: #dee4ec;
-width: 30px;
-display: inline-block;
-}
-
-
-
-.wrapper .sidebar ul li a:hover,
-.wrapper .sidebar ul li a.active{
-color: #0c7db1;
-
-background:white;
-    border-right: 2px solid rgb(5, 68, 104);
-}
-
-.wrapper .sidebar ul li a:hover .icon,
-.wrapper .sidebar ul li a.active .icon{
-color: #0c7db1;
-}
-
-.wrapper .sidebar ul li a:hover:before,
-.wrapper .sidebar ul li a.active:before{
-display: block;
-}
-
-.wrapper .section{
-width: calc(100% - 225px);
-margin-left: 225px;
-transition: all 0.5s ease;
-}
-
-
-#main {
-  transition: margin-left .5s;
-  padding: 16px;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
 </style>
-
-<script>
-function openNav() {
-  document.getElementById("mySidebar").style.width = "250px";
-  document.getElementById("main").style.marginLeft = "250px";
-}
-
-function closeNav() {
-  document.getElementById("mySidebar").style.width = "0";
-  document.getElementById("main").style.marginLeft= "0";
-}
-
-</script>
 
 	<div id="main">
 
@@ -316,95 +41,37 @@ function closeNav() {
 						<div class="panel panel-info">
 						  <div class="panel-heading">
 <br>
-														  <div class="dropdown">
-								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-								  Community Server
-								</button>
-
-								<div class="dropdown-menu">
-								  <a class="dropdown-item" href="#">Ranaka</a>
-								  <a class="dropdown-item" href="#">Molapowabojang</a>
-								  <a class="dropdown-item" href="#">Digawana</a>
-								</div>
-							  </div>
-							  <br>
-							  <h6>EDC SYNC DATA SUMMARY REPORT: Ranaka </h6>
+							<select class="form-select" aria-label="Select community server" id="sites">
+							  <option selected value="0">---Select Community Site---</option>
+								{% for site in sync_sites %}
+							 		 <option value="{{site.identifier}}">{{site.name}}</option>
+								{% endfor %}
+							</select>
 						  </div>
 						  <div class="panel-body">
 						  <div class="table-responsive">
-						  <table class="fixed table table-hover table-sm table-bordered ">
+						  <table class="fixed table table-hover table-sm table-bordered " id="report_table">
 							  <thead>
 								<tr>
 								  <th scope="col">Model Name</th>
 								  <th scope="col">Central Server</th>
 									<th scope="col">Community Server</th>
 									<th scope="col">Diff</th>
+									<th scope="col">Status</th>
 									<th scope="col">Detailed Report</th>
 								</tr>
 							  </thead>
 							  <tbody>
-								{% for dt in prev_study_data %}
-								<tr>
-								  <td>{{dt.0}}</td>
-								  <td>{{dt.1}}</td>
-								</tr>
+								{% for row in sync_report %}
+									<tr>
+										<td>{{row.model_name}}</td>
+									  <td><span class="badge badge-dark">{{row.server_value}}</span></td>
+									  <td><span class="badge badge-success">{{row.client_value}}</span></td>
+									  <td clas><span class="badge badge-danger">{{row.diff}}</span></td>
+										<td clas>{{row.label}}</td>
+									  <td><button class="btn btn-primary">Download</button></td>
+									</tr>
 								{% endfor %}
-								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
-							  								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
-							  								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
-							  								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
-							  								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
-							  								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
-							  								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
-							  								<tr>
-								  <td>Subject Visit</td>
-								  <td><span class="badge badge-dark">102234</span></td>
-							      <td><span class="badge badge-success">102240</span></td>
-							      <td clas><span class="badge badge-danger">6</span></td>
-								  <td><button class="btn btn-primary">Download</button></td>
-							  </tr>
 							  </tbody>
 							</table>
 							</div>
@@ -417,5 +84,52 @@ function closeNav() {
 		</div>
 	</div>
 
+<script>
 
+$(function() {
+
+$('#sites').on('change', function (e) {
+	var id = $(this).val();
+
+	if (id == 0) {
+		location.reload();
+	} else {
+		loadData(id);
+	}
+});
+
+function populateDataTable(data) {
+		console.log("populating data table...");
+		$("#report_table").DataTable().clear();
+		$.each(data , function(index, row) {
+  			$('#report_table').dataTable().fnAddData( [
+				row.model_name,
+				row.server_value,
+				row.client_value,
+				row.diff,
+				row.label,
+				""
+		  ]);
+		});
+}
+
+function loadData(identifier) {
+	$.ajax({
+		  type: 'GET',
+		  url: '/report_summary/'+identifier+'/',
+		  contentType: "text/plain",
+		  dataType: 'json',
+		  success: function (data) {
+			myJsonData = data;
+			populateDataTable(myJsonData);
+		  },
+		  error: function (e) {
+			console.log("There was an error with your request...");
+			console.log("error: " + JSON.stringify(e));
+		  }
+	});
+}
+
+});
+</script>
 </div>

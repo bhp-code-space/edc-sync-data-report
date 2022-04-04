@@ -7,5 +7,5 @@ class ClientCollectSummaryData(SummaryData):
     def create_summary_data(self):
         if len(self.build_summary()) > 0:
             return ClientSyncSummary.objects.create(
-                name='ranaka',
+                name='ranaka', # fixme set site name
                 data=self.build_summary())

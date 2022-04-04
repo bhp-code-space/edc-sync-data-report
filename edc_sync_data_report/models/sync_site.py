@@ -24,7 +24,7 @@ class SearchSlugModelMixin(Base):
 
 class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 
-    # identifier_cls = ExportIdentifier
+    name = models.CharField(max_length=100, blank=True)
 
     identifier = models.CharField(
         verbose_name="Site Identifier",

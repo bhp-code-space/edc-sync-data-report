@@ -18,11 +18,12 @@ from django.contrib import admin
 from django.urls import path
 
 from edc_sync_data_report.views.client_view_summary_api import ListClientSyncSummaryAPI, GetLiveClientSyncSummaryAPI
-from edc_sync_data_report.views.report_summary_view import ReportSummaryView
+from edc_sync_data_report.views.report_summary_view import ReportSummaryView, ReportSummaryViewAPI
 
 urlpatterns = [
     path('client_summary/', ListClientSyncSummaryAPI.as_view()),
     path('live_data/', GetLiveClientSyncSummaryAPI.as_view()),
     path('report_summary/', ReportSummaryView.as_view()),
+    path('report_summary/<int:identifier>/', ReportSummaryViewAPI.as_view()),
     path('admin/', admin.site.urls)
 ]
