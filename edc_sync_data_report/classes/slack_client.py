@@ -8,12 +8,10 @@ class SlakClient:
 
     def send_slack_message(self, message=None):
         client = WebClient(token=settings.SLACK_API_TOKEN)
-
         try:
             response = client.chat_postMessage(
                 channel='#sync_monitoring',
-                text="Hello world!")
-            assert response["message"]["text"] == "Hello world!"
+                text=message)
         except SlackApiError as e:
             # You will get a SlackApiError if "ok" is False
             assert e.response["ok"] is False

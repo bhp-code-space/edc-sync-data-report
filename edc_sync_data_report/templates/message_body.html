@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Good day!</p>
+<br>
+<h4>{{community}} Report </h4>
+<br>
+<br>
+<p>Please note that synchronization for the followings is not complete. </p>
+<br>
+<table class="fixed table table-hover table-sm table-bordered " id="report_table">
+  <thead>
+    <tr>
+      <th scope="col">Model Name</th>
+      <th scope="col">Central Server</th>
+        <th scope="col">Community Server</th>
+        <th scope="col">Diff</th>
+        <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in sync_report %}
+        <tr>
+            <td>{{row.model_name}}</td>
+          <td><span class="badge badge-dark">{{row.server_value}}</span></td>
+          <td><span class="badge badge-success">{{row.client_value}}</span></td>
+          <td clas><span class="badge badge-danger">{{row.diff}}</span></td>
+            <td clas>{{row.label}}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<br>
+<br>
+<p>Thank you.</p>
+</body>
+</html>

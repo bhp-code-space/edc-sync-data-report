@@ -10,6 +10,9 @@ from rest_framework.views import APIView
 from django.views.generic.base import TemplateView
 from django.http import JsonResponse
 
+from datetime import date
+from django.db.models import Q
+
 from django.http import HttpResponse
 
 
@@ -35,58 +38,46 @@ class ReportSummaryView(TemplateView): #, LoginRequiredMixin, EdcBaseViewMixin):
     #     return reverse('flourish_reports:recruitment_report_url')
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # summary_api = SyncAPIs.objects.get(sync_site__identifier=identifier, sync_site__valid_to__lte=datetime.today(),
-        #                                name="summary_api")
-        # response = requests.get(summary_api.uri)
-        # client_data = response.json()
-        #
-        # server_report = ServerCollectSummaryData()
-        # server_data = server_report.build_summary(site_id=summary_api[0].site.site_id)
-        #
-        # report = ReportSummaryData(server_data=server_data, client_data=client_data)
-        # matching, not_matching = report.data_comparison()
         data = []
-        row = RowData( 'Subject Visit', 10235, 10235, label='Matching')
-        data.append(row)
-        row = RowData('Caregiver', 10235, 10235, label='Matching')
-        data.append(row)
-        row = RowData('Locator', 1023225, 222244, label='Not matching')
-        data.append(row)
-        row = RowData('Contact', 10235, 10235, label='Matching')
-        data.append(row)
-        row = RowData('Referral', 10235, 10235, label='Matching')
-        data.append(row)
-        row = RowData('Locator Info', 1023225, 22222, label='Not matching')
-        data.append(row)
-        row = RowData('Locator', 1023225, 222244, label='Not matching')
-        data.append(row)
-        context['sync_report'] = data
-        context['sync_sites'] = SyncSite.objects.all()
+        context = super().get_context_data(**kwargs)
+        site = SyncSite.objects.filter(Q(valid_to__gte=date.today()) | Q(valid_to__isnull=True)).first()
+        try:
+            URL = f"http://{site.server}/api/live_data/"
+            try:
+                response = requests.get(URL)
+                client_data = response.json()
 
-        # Fixme I need list of sites
+                server_report = ServerCollectSummaryData()
+                server_data = server_report.build_summary(site_id=site.site_id)
+                report = ReportSummaryData(server_data=server_data, client_data=client_data)
+                matching, not_matching = report.data_comparison()
+                data = matching + not_matching
+            except requests.exceptions.Timeout:
+                pass
+        except AttributeError:
+            pass
+        context['sync_report'] = data
+        context['sync_sites'] = SyncSite.objects.filter(Q(valid_to__gte=date.today()) | Q(valid_to__isnull=True))
         return context
 
-    # @method_decorator(login_required)
-    # def dispatch(self, *args, **kwargs):
-    #     return super().dispatch(*args, **kwargs)
 
-from django.core import serializers
-
-class ReportSummaryViewAPI(APIView): #, LoginRequiredMixin, EdcBaseViewMixin):
+class ReportSummaryViewAPI(APIView):
 
     template_name = 'data_summary_report.html'
 
-    def get(self, request, format=None, identifier=None):
-        print(request)
+    def get(self, request, format=None, site_id=None, server=None):
         data = []
-        row = RowData('Contact', 10235, 10235, label='Matching')
-        data.append(row)
-        row = RowData('Referral', 10235, 10235, label='Matching')
-        data.append(row)
-        row = RowData('Locator Info', 1023225, 22222, label='Not matching')
-        data.append(row)
-        row = RowData('Locator', 1023225, 222244, label='Not matching')
-        data.append(row)
-        serializer = SyncSummarySerializer(data, many=True)
+        URL = f"http://{server}/api/live_data/"
+        try:
+            response = requests.get(URL)
+            client_data = response.json()
+
+            server_report = ServerCollectSummaryData()
+            server_data = server_report.build_summary(site_id=site_id)
+            report = ReportSummaryData(server_data=server_data, client_data=client_data)
+            matching, not_matching = report.data_comparison()
+            data = matching + not_matching
+            serializer = SyncSummarySerializer(data, many=True)
+        except requests.exceptions.Timeout:
+            pass
         return JsonResponse(serializer.data, safe=False)

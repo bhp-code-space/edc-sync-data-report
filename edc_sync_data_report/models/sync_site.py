@@ -63,3 +63,4 @@ class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'edc_sync_data_report'
+

@@ -30,7 +30,7 @@
 
 	<div id="main">
 
-	<h2 class="text-center">EDC SYNC REPORT DATA</h2>
+	<h2 class="text-center">EDC SYNC SUMMARY REPORT</h2>
 
 	<div class="container" id="report">
 		<div class="tab-content">
@@ -69,7 +69,8 @@
 									  <td><span class="badge badge-success">{{row.client_value}}</span></td>
 									  <td clas><span class="badge badge-danger">{{row.diff}}</span></td>
 										<td clas>{{row.label}}</td>
-									  <td><button class="btn btn-primary">Download</button></td>
+									  <td><a class="btn btn-primary" href="/active_sync_sites/" role="button">Download</a></td>
+
 									</tr>
 								{% endfor %}
 							  </tbody>
@@ -113,7 +114,7 @@ function populateDataTable(data) {
 		});
 }
 
-function loadData(identifier) {
+function loadData(identifier, server) {
 	$.ajax({
 		  type: 'GET',
 		  url: '/report_summary/'+identifier+'/',

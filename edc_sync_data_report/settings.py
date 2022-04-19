@@ -10,11 +10,25 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-SITE_ID = 40
+import configparser
+import os
+import sys
 
-APP_NAME = 'edc_sync_data_report_study_'
-
+from django.core.management.color import color_style
 from pathlib import Path
+
+APP_NAME = 'edc_sync_data_report_study'
+
+EMAIL_CONFIG_FILE = 'email_config.ini'
+ETC_DIR = os.path.join('/etc/', APP_NAME)
+
+style = color_style()
+CONFIG_PATH = os.path.join(ETC_DIR, EMAIL_CONFIG_FILE)
+sys.stdout.write(style.SUCCESS(f'  * Reading config from {EMAIL_CONFIG_FILE}\n'))
+config = configparser.ConfigParser()
+config.read(CONFIG_PATH)
+
+SITE_ID = 40
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,7 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'edc_sync_data_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
-    'rest_framework'
+    'rest_framework',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -141,3 +156,37 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SLACK_API_TOKEN = ""
+
+SYNC_ADMINS = ['ckgathi@bhp.org.bw', 'tmosweu@bhp.org.bw', 'tshepiso.setsiba@outlook.com']
+
+EMAIL_BACKEND = config['email_conf'].get('email_backend')
+EMAIL_HOST = config['email_conf'].get('email_host')
+EMAIL_USE_TLS = config['email_conf'].get('email_use_tls')
+EMAIL_PORT = config['email_conf'].get('email_port')
+EMAIL_HOST_USER = config['email_conf'].get('email_user')
+EMAIL_HOST_PASSWORD = config['email_conf'].get('email_host_pwd')
+
+Q_CLUSTER = {
+    'name': 'myproject',
+    'workers': 8,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 6379,
+        'db': 0, }
+}
+
+ETC_DIR = os.path.join('/etc/', APP_NAME)
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+# KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+# KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost' ]

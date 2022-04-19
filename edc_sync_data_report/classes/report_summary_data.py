@@ -19,10 +19,14 @@ class ReportSummaryData:
             client_value = self.client_data.get(key)
             if server_value != client_value:
                 row_data = RowData(model_name=key, server_value=server_value, client_value=client_value,
-                                   label="Matching")
+                                   label="Not matching")
                 not_matching.append(row_data)
             elif server_value == client_value:
                 row_data = RowData(model_name=key, server_value=server_value, client_value=client_value,
-                                   label="Not matching")
+                                   label="Matching")
                 matching.append(row_data)
         return matching, not_matching
+
+    def is_all_models_matching(self):
+        matching, not_matching = self.data_comparison()
+        return len(not_matching) == 0
