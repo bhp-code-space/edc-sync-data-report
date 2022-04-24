@@ -157,7 +157,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SLACK_API_TOKEN = ""
 
-SYNC_ADMINS = ['ckgathi@bhp.org.bw', 'tmosweu@bhp.org.bw', 'tshepiso.setsiba@outlook.com']
+SYNC_ADMINS = ['tshepiso.setsiba@outlook.com']
 
 EMAIL_BACKEND = config['email_conf'].get('email_backend')
 EMAIL_HOST = config['email_conf'].get('email_host')

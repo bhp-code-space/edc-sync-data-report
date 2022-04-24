@@ -8,6 +8,7 @@ class ReportSummaryData:
         self.client_data = client_data
 
     def data_comparison(self):
+        # TODO refactor for performance reasons
         matching = []
         not_matching = []
 

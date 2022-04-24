@@ -23,9 +23,10 @@ class Notification:
     def build_all_sites_report(self):
         sites_summary_report = []
         for site in self.sites:
-            summary_api = SyncAPIs.objects.get(sync_site=site, name="summary_api")
+            data = []
+            URL = f"http://{site.server}/api/live_data/"
             try:
-                response = requests.get(summary_api.uri)
+                response = requests.get(URL, timeout=45)
                 client_data = response.json()
 
                 server_report = ServerCollectSummaryData()
