@@ -1,5 +1,5 @@
 """
-ASGI config for mysite project.
+ASGI config for edc_sync_data_report project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

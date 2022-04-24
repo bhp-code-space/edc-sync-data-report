@@ -17,7 +17,7 @@ setup(
     author_email='se-dmc@bhp.org.bw',
     packages=find_packages(),
     include_package_data=True,
-    url='https://github.com/',
+    url='https://github.com/botswana-harvard/edc-sync-data-report',
     license='GPL license, see LICENSE',
     description='EDC SYNC DATA REPORT',
     long_description=README,

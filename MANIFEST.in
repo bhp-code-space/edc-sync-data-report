@@ -1,0 +1,2 @@
+include AUTHORS CHANGES README.md LICENCE
+recursive-include edc_sync_data_report/templates *
