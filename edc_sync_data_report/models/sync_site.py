@@ -38,7 +38,8 @@ class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 
     description = models.CharField(max_length=255, blank=True)
 
-    server = models.CharField(max_length=15, blank=True)
+    server = models.CharField(max_length=15, blank=True, help_text="Provide server ip including a port if neccessary. "
+                                                                   "e.g 10.31.31.230:8000")
 
     valid_from = models.DateField(
         verbose_name="Report start date",
@@ -63,4 +64,3 @@ class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'edc_sync_data_report'
-
