@@ -1,4 +1,6 @@
-# edc-sync-data-report
+# Edc-sync-data-report
+
+The module tracks edc sync models data between two community server and central server.
 
 ###### Sync Models Registration - Register Models
 
