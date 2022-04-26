@@ -22,7 +22,7 @@ class SearchSlugModelMixin(Base):
 
     class Meta:
         abstract = True
-
+# TODO: review if this model is required
 
 class SyncAPIs(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 

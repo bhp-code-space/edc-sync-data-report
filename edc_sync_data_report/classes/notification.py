@@ -17,6 +17,10 @@ from smtplib import SMTPException, SMTPAuthenticationError
 
 class Notification:
 
+    """
+        Build a summary report for each active sync site then send a report to an email.
+    """
+
     def __init__(self, active_sites=None):
         self.sites = active_sites or SyncSite.objects.filter(valid_to__gte=date.today())
 

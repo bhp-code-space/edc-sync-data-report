@@ -3,6 +3,10 @@ from edc_sync_data_report.classes.row_data import RowData
 
 class ReportSummaryData:
 
+    """
+        Compares sync site data vs central server data.
+    """
+
     def __init__(self, server_data, client_data):
         self.server_summary_data = server_data
         self.client_data = client_data

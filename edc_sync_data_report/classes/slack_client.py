@@ -6,6 +6,10 @@ from django.conf import settings
 
 class SlakClient:
 
+    """
+        Send a slack notification to the specified slack channel.
+    """
+
     def send_slack_message(self, message=None):
         client = WebClient(token=settings.SLACK_API_TOKEN)
         try:

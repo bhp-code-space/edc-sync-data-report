@@ -11,8 +11,9 @@ from edc_sync_data_report.models.sync_confirmation_ids import SyncConfirmationId
 
 class SummaryData:
     """
-        A description is required
+        Based on sync models register, creates a summary report.
     """
+
     def get_model_by_app_label_and_model_name(self, app_label, model_name, site_id, created_date):
         model_cls = apps.get_model(app_label, model_name)
         return  model_cls.objects.filter(site__id=site_id, created__date=created_date).values_list('id', 'created')
