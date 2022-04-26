@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from datetime import datetime, date
 
-from edc_sync_data_report.classes.does_exists_in_central_server import DoesExistsInCentralServer
+from edc_sync_data_report.classes.does_transaction_exists_in_central_server import DoesTransactionExistsInCentralServer
 from edc_sync_data_report.models import SyncSite, SyncAPIs
 
 
@@ -36,7 +36,7 @@ class SyncDetailedReportView(View):  # , LoginRequiredMixin, EdcBaseViewMixin):
             url = f"http://{server}/api/{site_id}/{created_date}/confirmation_data/"
             response = requests.get(url, timeout=10)
             data = response.json()
-            run_validation = DoesExistsInCentralServer()
+            run_validation = DoesTransactionExistsInCentralServer() # Fixme name of class
             missings = run_validation.sync_data_check(data=data)
             response = HttpResponse(
                 content_type='text/csv',
