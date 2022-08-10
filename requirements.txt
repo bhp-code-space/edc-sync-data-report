@@ -16,3 +16,4 @@ django-crispy-forms
 django-multiselectfield
 djangorestframework
 django
+requests-mock

@@ -43,4 +43,3 @@ Server Configuration
  
 Run the following command as background service
 > python manage.py qcluster
-* Please note that djangoq requires Redis service to be running.

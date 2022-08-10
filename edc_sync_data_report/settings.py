@@ -187,7 +187,7 @@ EMAIL_HOST_USER = config['email_conf'].get('email_user')
 EMAIL_HOST_PASSWORD = config['email_conf'].get('email_host_pwd')
 
 Q_CLUSTER = {
-    'name': 'myproject',
+    'name': 'edc_sync_report',
     'workers': 8,
     'recycle': 500,
     'timeout': 60,
