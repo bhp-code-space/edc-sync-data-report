@@ -27,20 +27,20 @@ Run the following management command
 
 Install the Redis Server on Client and Server VM. (it is a dependency for django_q)
 
-Client Configuration
-
-You need to add the following task on django_q admin
-1. Add prepare_confirmation_ids:
-2. Add prepare_summary_count_data
-
-Server Configuration
-
- 1. Add : send_sync_report
+There are 3 tasks to be configured.
 
 1. send_sync_report, should be registered with djangoq admin scheduler
 2. prepare_confirmation_ids, should be registered with djangoq admin scheduler
 3. prepare_summary_count_data, should be registered with djangoq admin scheduler
 
+Client Configuration
+You need to add the following task on django_q admin
+1. Add prepare_confirmation_ids:
+2. Add prepare_summary_count_data
+
+Server Configuration
+ 1. Add : send_sync_report
+ 
 Run the following command as background service
 > python manage.py qcluster
 * Please note that djangoq requires Redis service to be running.
