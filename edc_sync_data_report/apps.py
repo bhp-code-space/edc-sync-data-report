@@ -11,7 +11,6 @@ class AppConfig(DjangoAppConfig):
     name = 'edc_sync_data_report'
 
 
-
 class EdcBaseAppConfig(BaseEdcBaseAppConfig):
     project_name = 'EDC SYNC Data Report'
     institution = 'Botswana-Harvard AIDS Institute'
