@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.contrib.sites.models import Site
 from django.apps import apps
+from edc_base.sites import SiteModelMixin
 
 from datetime import date
 
@@ -45,19 +46,25 @@ class Command(BaseCommand):
                 app_models = apps.get_app_config(app_label).get_models()
                 i = 1
                 for model in app_models:
-                    try:
-                        SyncModels.objects.get(app_label=app_label, model_name=model._meta.model.__name__)
-                        self.stdout.write(self.style.NOTICE(
-                            ' {}. {} already registered sync tracking."'.format(i, model._meta.model.__name__), ))
-                    except ObjectDoesNotExist:
-                        SyncModels.objects.create(
-                            app_label=app_label,
-                            model_name=model._meta.model.__name__,
-                            valid_from=date.today(),
-                            site=site
-                        )
-                        self.stdout.write(self.style.SUCCESS(' {}. {} registered successfully sync tracking."'.format(
-                            i, model._meta.model.__name__), ))
+                    if issubclass(model, SiteModelMixin):
+                        try:
+                            SyncModels.objects.get(app_label=app_label, model_name=model._meta.model.__name__)
+                            self.stdout.write(self.style.NOTICE(
+                                ' {}. {} already registered sync tracking."'.format(i, model._meta.model.__name__), ))
+                        except ObjectDoesNotExist:
+                            SyncModels.objects.create(
+                                app_label=app_label,
+                                model_name=model._meta.model.__name__,
+                                valid_from=date.today(),
+                                site=site
+                            )
+                            self.stdout.write(self.style.SUCCESS(' {}. {} registered successfully sync tracking."'
+                                .format(
+                                i, model._meta.model.__name__), ))
+                    else:
+                        self.stdout.write(
+                            self.style.SUCCESS(' {}. {} not registered.  Not a subclass of SiteModelMixin'
+                                                             '."'.format(i, model._meta.model.__name__), ))
                     i = i + 1
             elif len(options.get("app_label")) > 0 and options.get("model_name"):
                 app_label = options.get("app_label")[0]
