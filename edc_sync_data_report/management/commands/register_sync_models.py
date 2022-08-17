@@ -1,12 +1,11 @@
+from datetime import date
 import logging
 
+from django.apps import apps
+from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
-from django.contrib.sites.models import Site
-from django.apps import apps
 from edc_base.sites import SiteModelMixin
-
-from datetime import date
 
 from edc_sync_data_report.models import SyncModels
 
@@ -50,7 +49,7 @@ class Command(BaseCommand):
                         try:
                             SyncModels.objects.get(app_label=app_label, model_name=model._meta.model.__name__)
                             self.stdout.write(self.style.NOTICE(
-                                ' {}. {} already registered sync tracking."'.format(i, model._meta.model.__name__), ))
+                                ' {}. {} already registered sync tracking."'.format(i, model._meta.model.__name__),))
                         except ObjectDoesNotExist:
                             SyncModels.objects.create(
                                 app_label=app_label,
@@ -60,13 +59,13 @@ class Command(BaseCommand):
                             )
                             self.stdout.write(self.style.SUCCESS(' {}. {} registered parent model."'
                                 .format(
-                                i, model._meta.model.__name__), ))
+                                i, model._meta.model.__name__),))
 
                         historical_model = model.history.model
                         try:
-                            SyncModels.objects.get(app_label=app_label, model_name=historical_model.model.__name__)
+                            SyncModels.objects.get(app_label=app_label, model_name=historical_model.__name__)
                             self.stdout.write(self.style.NOTICE(
-                                ' {}. {} already registered sync tracking."'.format(i, historical_model.model.__name__), ))
+                                ' {}. {} already registered sync tracking."'.format(i, historical_model.__name__),))
                         except ObjectDoesNotExist:
                             SyncModels.objects.create(
                                 app_label=app_label,
@@ -76,8 +75,8 @@ class Command(BaseCommand):
                             )
                     else:
                         self.stdout.write(
-                            self.style.WARN(' {}. {} not registered.  Not a subclass of SiteModelMixin'
-                                                             '."'.format(i, model._meta.model.__name__), ))
+                            self.style.WARNING(' {}. {} not registered.  Not a subclass of SiteModelMixin'
+                                                             '."'.format(i, model._meta.model.__name__),))
                     i = i + 1
             elif len(options.get("app_label")) > 0 and options.get("model_name"):
                 app_label = options.get("app_label")[0]
@@ -85,7 +84,7 @@ class Command(BaseCommand):
                 try:
                     SyncModels.objects.get(app_label=app_label, model_name=model_name, site__id=options.get("site_id")[0])
                     self.stdout.write(self.style.SUCCESS(
-                        '{} already registered sync tracking."'.format(model_name), ))
+                        '{} already registered sync tracking."'.format(model_name),))
                 except ObjectDoesNotExist:
                     app_label = options.get("app_label")[0]
                     model_name = options.get("model_name")[0]

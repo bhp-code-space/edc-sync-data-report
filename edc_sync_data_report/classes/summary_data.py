@@ -1,11 +1,10 @@
 from datetime import date
 
+from django.apps import apps
+from django.conf import settings
 from django.db import IntegrityError
 
 from edc_sync_data_report.models import SyncModels
-from django.apps import apps
-from django.conf import settings
-
 from edc_sync_data_report.models.sync_confirmation_ids import SyncConfirmationIds
 
 
@@ -24,7 +23,7 @@ class SummaryData:
 
     def build_summary(self, site_id=None):
         data = {}
-        sync_models = SyncModels.objects.filter(site__site_id=site_id)
+        sync_models = SyncModels.objects.filter(site__id=site_id)
 
         for sync_model in sync_models:
             key = f'{sync_model.app_label}__{sync_model.model_name}'
