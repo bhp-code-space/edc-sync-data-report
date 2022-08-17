@@ -42,7 +42,7 @@ class SummaryData:
         :return:
         """
         data = []
-        sync_models = SyncModels.objects.filter(site_id=site_id)
+        sync_models = SyncModels.objects.filter(site_id=site_id)  # Get registered models
 
         for sync_model in sync_models:
             values_list = self.get_model_by_app_label_and_model_name(

@@ -28,7 +28,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        if len(options.get("site_id")) == 0:
+        if options is None:
             self.stdout.write(self.style.NOTICE(
                 'Site ID is mandatory, kindly provide it. e.g --site_id 99'))
         else:

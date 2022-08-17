@@ -58,12 +58,25 @@ class Command(BaseCommand):
                                 valid_from=date.today(),
                                 site=site
                             )
-                            self.stdout.write(self.style.SUCCESS(' {}. {} registered successfully sync tracking."'
+                            self.stdout.write(self.style.SUCCESS(' {}. {} registered parent model."'
                                 .format(
                                 i, model._meta.model.__name__), ))
+
+                        historical_model = model.history.model
+                        try:
+                            SyncModels.objects.get(app_label=app_label, model_name=historical_model.model.__name__)
+                            self.stdout.write(self.style.NOTICE(
+                                ' {}. {} already registered sync tracking."'.format(i, historical_model.model.__name__), ))
+                        except ObjectDoesNotExist:
+                            SyncModels.objects.create(
+                                app_label=app_label,
+                                model_name=historical_model.__name__,
+                                valid_from=date.today(),
+                                site=site
+                            )
                     else:
                         self.stdout.write(
-                            self.style.SUCCESS(' {}. {} not registered.  Not a subclass of SiteModelMixin'
+                            self.style.WARN(' {}. {} not registered.  Not a subclass of SiteModelMixin'
                                                              '."'.format(i, model._meta.model.__name__), ))
                     i = i + 1
             elif len(options.get("app_label")) > 0 and options.get("model_name"):
