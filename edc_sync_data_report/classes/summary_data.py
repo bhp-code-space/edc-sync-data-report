@@ -16,7 +16,14 @@ class SummaryData:
 
     def get_model_by_app_label_and_model_name(self, app_label, model_name, site_id, created_date):
         model_cls = apps.get_model(app_label, model_name)
-        return  model_cls.objects.filter(site__id=site_id, created__date=created_date).values_list('id', 'created')
+        # Condition whether it is history or not
+        try:
+            model_cls.history.model
+            return model_cls.objects.filter(
+                site__id=site_id, created__date=created_date).values_list('history_id', 'created')
+        except AttributeError:
+            return model_cls.objects.filter(
+                site__id=site_id, created__date=created_date).values_list('id', 'created')
 
     def count_by_app_label_and_model_name(self, app_label, model_name, site_id):
         model_cls = apps.get_model(app_label, model_name)
@@ -50,6 +57,7 @@ class SummaryData:
                 created_date=created_date)
             for model_obj in values_list:
                 model_obj_id, model_obj_created = model_obj
+                # Condition whether it is history or not
                 try:
                     obj = SyncConfirmationIds.objects.create(
                         app_label=sync_model.app_label,
@@ -63,4 +71,6 @@ class SummaryData:
                 except IntegrityError:
                     # already registered key
                     pass
+
+
         return data
