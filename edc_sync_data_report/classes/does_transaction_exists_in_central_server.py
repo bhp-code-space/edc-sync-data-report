@@ -21,7 +21,7 @@ class DoesTransactionExistsInCentralServer:
                 pass
             try:
                 if is_historical_model:
-                    model_cls.objects.get(history_id=record["primary_key"])
+                    model_cls.objects.get(history_id=record["history_id"])
                 else:
                     model_cls.objects.get(id=record["primary_key"])
             except ObjectDoesNotExist:
