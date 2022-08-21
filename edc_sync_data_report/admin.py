@@ -4,7 +4,8 @@ from .models import SyncSite, SyncModels
 
 @admin.register(SyncSite)
 class SyncSiteAdmin(admin.ModelAdmin):
-    pass
+
+    list_display = ('study', 'server', 'name', 'site_id')
 
 
 @admin.register(SyncModels)
