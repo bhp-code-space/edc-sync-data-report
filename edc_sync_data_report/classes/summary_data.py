@@ -2,6 +2,7 @@ from datetime import date
 
 from django.apps import apps
 from django.conf import settings
+from django.core.exceptions import FieldDoesNotExist
 from django.db import IntegrityError
 
 from edc_sync_data_report.models import SyncModels
@@ -16,11 +17,12 @@ class SummaryData:
     def get_model_by_app_label_and_model_name(self, app_label, model_name, site_id, created_date):
         model_cls = apps.get_model(app_label, model_name)
         # Condition whether it is history or not
+
         try:
-            model_cls.history.model
+            model_cls._meta.get_field('history_id')
             return model_cls.objects.filter(
                 site__id=site_id, created__date=created_date).values_list('history_id', 'created')
-        except AttributeError:
+        except FieldDoesNotExist:
             return model_cls.objects.filter(
                 site__id=site_id, created__date=created_date).values_list('id', 'created')
 
@@ -70,6 +72,5 @@ class SummaryData:
                 except IntegrityError:
                     # already registered key
                     pass
-
 
         return data
