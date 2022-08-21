@@ -34,7 +34,7 @@ class SyncDetailedReportView(View):  # , LoginRequiredMixin, EdcBaseViewMixin):
         sync_site = SyncSite.objects.filter(site__id=site_id).first()
         try:
             url = f"http://{server}/edc_sync_data_report/api/{site_id}/{created_date}/confirmation_data/"
-            response = requests.get(url, timeout=10)
+            response = requests.get(url, timeout=45)
             data = response.json()
             run_validation = DoesTransactionExistsInCentralServer() # Fixme name of class
             missings = run_validation.sync_data_check(data=data)
@@ -44,7 +44,7 @@ class SyncDetailedReportView(View):  # , LoginRequiredMixin, EdcBaseViewMixin):
             )
             writer = csv.writer(response)
             writer.writerow(['Community Name', 'Site ID', '', ''])
-            writer.writerow([sync_site.name, sync_site.identifier, '', ''])
+            writer.writerow([sync_site.name, sync_site.community_site_id, '', ''])
             writer.writerow(['Model Name', 'App Label', 'Primary Key', 'Created Date'])
             for record in missings:
                 writer.writerow([record["model_name"], record["app_label"], record["primary_key"],
