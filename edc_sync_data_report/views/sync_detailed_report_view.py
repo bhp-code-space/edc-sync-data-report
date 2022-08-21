@@ -33,7 +33,7 @@ class SyncDetailedReportView(View):  # , LoginRequiredMixin, EdcBaseViewMixin):
         response = None
         sync_site = SyncSite.objects.filter(site__id=site_id).first()
         try:
-            url = f"http://{server}/api/{site_id}/{created_date}/confirmation_data/"
+            url = f"http://{server}/edc_sync_data_report/api/{site_id}/{created_date}/confirmation_data/"
             response = requests.get(url, timeout=10)
             data = response.json()
             run_validation = DoesTransactionExistsInCentralServer() # Fixme name of class
