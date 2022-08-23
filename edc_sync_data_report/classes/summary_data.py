@@ -32,7 +32,7 @@ class SummaryData:
 
     def build_summary(self, site_id=None):
         data = {}
-        sync_models = SyncModels.objects.filter(site__id=site_id)
+        sync_models = SyncModels.objects.filter(site__id=site_id or settings.SITE_ID)
 
         for sync_model in sync_models:
             key = f'{sync_model.app_label}__{sync_model.model_name}'

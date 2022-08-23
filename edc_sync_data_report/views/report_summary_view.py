@@ -42,7 +42,7 @@ class ReportSummaryView(TemplateView): #, LoginRequiredMixin, EdcBaseViewMixin):
         context = super().get_context_data(**kwargs)
         site = SyncSite.objects.filter(Q(valid_to__gte=date.today()) | Q(valid_to__isnull=True)).first()
         try:
-            URL = f"http://{site.server}/api/live_data/"
+            URL = f"http://{site.server}/edc_sync_data_report/api/live_data/"
             try:
                 response = requests.get(URL)
                 client_data = response.json()
@@ -67,7 +67,7 @@ class ReportSummaryViewAPI(APIView):
 
     def get(self, request, format=None, site_id=None, server=None):
         data = []
-        URL = f"http://{server}/api/live_data/"
+        URL = f"http://{server}/edc_sync_data_report/api/live_data/"
         try:
             response = requests.get(URL)
             client_data = response.json()

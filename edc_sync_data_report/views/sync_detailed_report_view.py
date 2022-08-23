@@ -52,3 +52,4 @@ class SyncDetailedReportView(View):  # , LoginRequiredMixin, EdcBaseViewMixin):
         except requests.exceptions.Timeout:
             pass
         return response
+
