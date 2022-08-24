@@ -34,7 +34,7 @@ class Command(BaseCommand):
             type=str
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options): # TODO refactor to remove possible duplicates..
         if len(options.get("site_id")) == 0:
             self.stdout.write(self.style.NOTICE(
                 'Site ID is mandatory, kindly provide it. e.g --site_id 99'))
@@ -61,7 +61,7 @@ class Command(BaseCommand):
                                 .format(
                                 i, model._meta.model.__name__),))
 
-                        historical_model = model.history.model
+                        historical_model = model.history.model # TODO handle scenario where there is no history Manager on the model
                         try:
                             SyncModels.objects.get(app_label=app_label, model_name=historical_model.__name__)
                             self.stdout.write(self.style.NOTICE(
