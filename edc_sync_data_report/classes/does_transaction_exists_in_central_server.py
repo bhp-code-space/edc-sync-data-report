@@ -8,7 +8,7 @@ class DoesTransactionExistsInCentralServer:
     """
         Checks if the record exists in central server given primary key.
     """
-    def sync_data_check(self, data):
+    def sync_data_check(self, data): # TODO All dictionary should use get insted [] method
         missing_records = []
         for record in data:
             model_cls = django_apps.get_model(model_name=record["model_name"], app_label=record["app_label"]) #
