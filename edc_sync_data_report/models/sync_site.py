@@ -26,9 +26,9 @@ class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 
     name = models.CharField(max_length=100, blank=True)
 
-    identifier = models.CharField(
-        verbose_name="Site Identifier",
-        max_length=36,
+    community_site_id = models.CharField(
+        verbose_name="Community Site ID",
+        max_length=10,
         unique=True,
         editable=False)
 
@@ -54,14 +54,14 @@ class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
         blank=True)
 
     def __str__(self):
-        return f'{self.identifier}'
+        return f'{self.community_site_id}'
 
     def natural_key(self):
-        return self.identifier
+        return self.community_site_id
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
-        fields.append('identifier')
+        fields.append('community_site_id')
         return fields
 
     class Meta:

@@ -40,7 +40,7 @@ urlpatterns = [
     path('api/<str:server>/<int:site_id>/report_summary/', ReportSummaryViewAPI.as_view()),
     path('<str:server>/<int:site_id>/<str:created_date>/detailed_report/', SyncDetailedReportView.as_view()),
     path('api/client_summary/', ListClientSyncSummaryAPI.as_view()),
-    path('api/<int:site_id>/<str:created_date>/confirmation_data/', SyncConfirmationIdsViewAPI.as_view()),
+    path('edc_sync_data_report/api/<int:site_id>/<str:created_date>/confirmation_data/', SyncConfirmationIdsViewAPI.as_view()),
     path('admin/', admin.site.urls),
     path('admin/', edc_identifier_admin.urls),
     path('administration/', AdministrationView.as_view(),
