@@ -23,4 +23,3 @@ def prepare_confirmation_ids():
 def prepare_summary_count_data():
     collector = ClientCollectSummaryData()
     collector.create_summary_data()
-
