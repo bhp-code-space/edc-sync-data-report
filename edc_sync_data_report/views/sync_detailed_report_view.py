@@ -47,7 +47,7 @@ class SyncDetailedReportView(View):  # , LoginRequiredMixin, EdcBaseViewMixin):
             writer.writerow(['Model Name', 'App Label', 'Primary Key', 'Created Date'])
             for record in missing_records:
                 writer.writerow([record["model_name"], record["app_label"], record["primary_key"],
-                                 record["created_date"]])
+                                 record["data_collection_date"]])
         except requests.exceptions.Timeout:
             pass
         return response
