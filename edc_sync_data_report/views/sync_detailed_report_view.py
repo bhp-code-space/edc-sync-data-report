@@ -37,19 +37,17 @@ class SyncDetailedReportView(View):  # , LoginRequiredMixin, EdcBaseViewMixin):
             response = requests.get(url, timeout=45)
             data = response.json()
             run_validation = DoesTransactionExistsInCentralServer() # Fixme name of class
-            missings = run_validation.sync_data_check(data=data)
-            response = HttpResponse(
-                content_type='text/csv',
-                headers={'Content-Disposition': 'attachment; filename="missing_records.csv"'},
-            )
+            missing_records = run_validation.sync_data_check(data=data)
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = f'attachment; filename="missing_records-{site_id}-{created_date}.csv"'
+
             writer = csv.writer(response)
             writer.writerow(['Community Name', 'Site ID', '', ''])
             writer.writerow([sync_site.name, sync_site.community_site_id, '', ''])
             writer.writerow(['Model Name', 'App Label', 'Primary Key', 'Created Date'])
-            for record in missings:
+            for record in missing_records:
                 writer.writerow([record["model_name"], record["app_label"], record["primary_key"],
                                  record["created_date"]])
         except requests.exceptions.Timeout:
             pass
         return response
-
