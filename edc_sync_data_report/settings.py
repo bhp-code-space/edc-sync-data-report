@@ -206,6 +206,9 @@ ETC_DIR = os.path.join('/etc/', APP_NAME)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Set DIR to SAVE Reports
+SYNC_REPORTS = '/etc/'
+
 # KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 # KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
 

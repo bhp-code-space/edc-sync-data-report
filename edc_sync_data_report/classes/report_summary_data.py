@@ -22,11 +22,11 @@ class ReportSummaryData:
         for key in shared_keys:
             server_value = self.server_summary_data.get(key)
             client_value = self.client_data.get(key)
-            if server_value != client_value:
+            if server_value < client_value:
                 row_data = RowData(model_name=key, server_value=server_value, client_value=client_value,
                                    label="Not matching")
                 not_matching.append(row_data)
-            elif server_value == client_value:
+            elif server_value > client_value or server_value == client_value:
                 row_data = RowData(model_name=key, server_value=server_value, client_value=client_value,
                                    label="Matching")
                 matching.append(row_data)

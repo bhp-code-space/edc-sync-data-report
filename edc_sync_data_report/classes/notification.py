@@ -1,11 +1,16 @@
+import os
+
+import pandas as pd
 import requests
 
-from datetime import date
+from datetime import date, datetime, timedelta
 from django.conf import settings
 
 from edc_sync_data_report.classes import ReportSummaryData
 from edc_sync_data_report.classes.server_collect_summary_data import ServerCollectSummaryData
 from edc_sync_data_report.models import SyncSite, SyncAPIs
+
+from edc_sync_data_report.classes.does_transaction_exists_in_central_server import DoesTransactionExistsInCentralServer
 
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -32,13 +37,31 @@ class Notification:
             try:
                 response = requests.get(URL, timeout=45)
                 client_data = response.json()
-
+                tmp = []
                 server_report = ServerCollectSummaryData()
                 server_data = server_report.build_summary(site_id=site.site_id)
                 report = ReportSummaryData(server_data=server_data, client_data=client_data)
                 matching, not_matching = report.data_comparison()
                 site_report = {f"{site.name}_{site.site_id}": not_matching}
-                sites_summary_report.append(site_report)
+                tmp.append(site_report)
+
+                # Build detailed report
+                sync_transaction_date = date.today() - timedelta(days=1)
+                created_date = datetime.strptime(sync_transaction_date, '%Y-%m-%d')
+                url = f"http://{site.server}/edc_sync_data_report/api/{site.site_id}/{created_date}/confirmation_data/"
+                response = requests.get(url, timeout=45)
+                data = response.json()
+                run_validation = DoesTransactionExistsInCentralServer()
+                missing_records = run_validation.sync_data_check(data=data)
+                detailed_data = [[r.record.get("model_name"), r.record.get("primary_key")] for r in missing_records]
+                sync_detailed_df = pd.DataFrame(data=detailed_data, columns=['ModelName', 'Primary Key/Transaction ID'])
+                filename = f'Sync Report-{site.name}({site.site_id})-{sync_transaction_date}.csv'
+                detailed_report_file_path = os.path.join(settings.SYNC_REPORTS, filename)
+                sync_detailed_df.to_csv(detailed_report_file_path, index=False, sep=',',
+                                        encoding='utf-8')
+                tmp.append(detailed_report_file_path)
+                sites_summary_report.append(tmp)
+
             except requests.exceptions.Timeout:
                 pass
             except Exception as ex:
@@ -47,20 +70,22 @@ class Notification:
 
     def build(self):
         print("preparing sync report.")
-        if len(self.build_all_sites_report()) == 0:
+        _data = self.build_all_sites_report()
+        if len(_data) == 0:
             self.send(subject="EDC Synchronization Report", template_body_name="message_noreport.html")
         else:
-            for data in self.build_all_sites_report():
+            for data in _data:
+                summary, file_path = data
                 name = None
                 report = None
-                for key in data:
+                for key in summary:
                     name, _ = key.split('_')
                     report = data.get(key)
                 self.send(site_name=name, report=report, template_body_name="message_body.html",
-                          subject="EDC Synchronization Report")
+                          subject="EDC Synchronization Report", report_file=file_path)
         print("Done.")
 
-    def send(self, site_name=None, report=None, template_body_name=None, subject=None):
+    def send(self, site_name=None, report=None, template_body_name=None, subject=None, report_file=None):
         try:
             merge_data = {
                 'community': site_name, 'sync_report': report, "report_date": date.today()
@@ -70,7 +95,11 @@ class Notification:
 
             msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
                                          to=settings.SYNC_ADMINS, body=text_body)
+            # Attach detailed report
             msg.attach_alternative(html_body, "text/html")
+            with open(report_file, 'w', encoding='utf-8') as detailed_report:
+                msg.attach(detailed_report.name, report_file.read(), 'text/csv')
+
             msg.send()
         except SMTPAuthenticationError as e1:
             print("An error occurred, ", e1)
@@ -78,3 +107,5 @@ class Notification:
             print("An error occurred, ", e2)
         except:
             print("Mail Sending Failed!")
+
+

@@ -46,6 +46,5 @@ Run the following command as background service
 
 """  Data Collection Closing Day
 1. Based on valid from until valid to, generate confirmation data 
-2. Run validation, then close data sync collection 
-
+2. Run validation, then close data sync collection
 """
