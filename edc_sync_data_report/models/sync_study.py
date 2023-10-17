@@ -21,11 +21,11 @@ class SearchSlugModelMixin(Base):
     class Meta:
         abstract = True
 
-#TODO review if this model is required
+
+# TODO review if this model is required
 
 
 class SyncStudy(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
-
     study_name = models.CharField(
         verbose_name="class reference absolute path",
         max_length=200, blank=False)

@@ -1,17 +1,17 @@
 from django.apps import apps as django_apps
-
-from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist
+from django.core.exceptions import FieldDoesNotExist, ObjectDoesNotExist
 
 
 class DoesTransactionExistsInCentralServer:
+    """ Checks if the record exists in central server given primary key.
+    """
 
-    """
-        Checks if the record exists in central server given primary key.
-    """
-    def sync_data_check(self, data): # TODO All dictionary should use get insted [] method
+    def sync_data_check(self,
+                        data):  # TODO All dictionary should use get insted [] method
         missing_records = []
         for record in data:
-            model_cls = django_apps.get_model(model_name=record.get("model_name"), app_label=record.get("app_label"))
+            model_cls = django_apps.get_model(model_name=record.get("model_name"),
+                                              app_label=record.get("app_label"))
             # Fixme handle a case where model does exits
             is_historical_model = False
             try:

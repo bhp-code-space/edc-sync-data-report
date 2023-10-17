@@ -23,7 +23,6 @@ class SearchSlugModelMixin(Base):
 
 
 class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
-
     name = models.CharField(max_length=100, blank=True)
 
     community_site_id = models.CharField(
@@ -40,8 +39,8 @@ class SyncSite(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
 
     server = models.CharField(max_length=25,
                               blank=True,
-                              help_text="Provide server ip including a port if neccessary. "
-                                        "e.g 10.31.31.230:8000")
+                              help_text="Provide server ip including a port if "
+                                        "neccessary. e.g 10.31.31.230:8000")
 
     valid_from = models.DateField(
         verbose_name="Report start date",

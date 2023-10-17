@@ -1,7 +1,4 @@
-
-
 class RowData:
-
     def __init__(self, model_name, server_value, client_value, label=None):
         self.model_name = model_name
         self.server_value = server_value

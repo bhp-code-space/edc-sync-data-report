@@ -1,4 +1,4 @@
-# Edc-sync-data-report
+# Edc-sync-data-report ![Build Status](https://github.com/bhp-code-space/edc-sync-data-report/actions/workflows/django.yml/badge.svg) [![Coverage Status](https://codecov.io/gh/bhp-code-space/edc-sync-data-report/branch/develop/graph/badge.svg?token=6d1ad9c3-37d2-4e37-b077-d9394a1d5874)](https://codecov.io/gh/bhp-code-space/edc-sync-data-report)
 
 The module tracks edc sync models data between two community server and central server.
 
@@ -33,12 +33,13 @@ There are 3 tasks to be configured.
 2. prepare_confirmation_ids, should be registered with djangoq admin scheduler
 3. prepare_summary_count_data, should be registered with djangoq admin scheduler
 
-Client Configuration
+#### Client Configuration
+
 You need to add the following task on django_q admin
 1. Add prepare_confirmation_ids:
 2. Add prepare_summary_count_data
 
-Server Configuration
+#### Server Configuration
  1. Add : send_sync_report
  
 Run the following command as background service

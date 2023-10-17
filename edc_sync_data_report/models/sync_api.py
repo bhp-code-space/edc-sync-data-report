@@ -1,6 +1,5 @@
 from django.db import models
 from edc_base.model_mixins import BaseUuidModel
-
 from edc_base.sites import SiteModelMixin
 from edc_search.model_mixins import SearchSlugManager
 from edc_search.model_mixins import SearchSlugModelMixin as Base
@@ -22,14 +21,15 @@ class SearchSlugModelMixin(Base):
 
     class Meta:
         abstract = True
+
+
 # TODO: review if this model is required
 
 class SyncAPIs(SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
-
     # identifier_cls = ExportIdentifier
 
     sync_site = models.ForeignKey(SyncSite,
-                               on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE)
 
     name = models.CharField(
         verbose_name="Name of API",

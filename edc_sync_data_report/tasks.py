@@ -11,6 +11,7 @@ def send_sync_report():
     sender = Notification()
     sender.build()
 
+
 def prepare_confirmation_ids():
     collector = SummaryData()
     created_date = date.today()

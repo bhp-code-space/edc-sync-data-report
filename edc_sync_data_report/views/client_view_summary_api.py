@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from edc_sync_data_report.classes import ClientCollectSummaryData
 from edc_sync_data_report.models.client_sync_summary import ClientSyncSummary
@@ -16,8 +16,8 @@ class ListClientSyncSummaryAPI(APIView):
     """
 
     def get(self, request, format=None):
-        """
-        Return a list of all Client Sync Summary: Total count against each model in community server.
+        """Return a list of all Client Sync Summary: Total count against each model in
+        community server.
         """
         objects = ClientSyncSummary.objects.all()
         serializers = ClientSyncSummarySerializer(objects, many=True)

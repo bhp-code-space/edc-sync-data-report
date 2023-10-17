@@ -31,7 +31,10 @@ config.read(CONFIG_PATH)
 SITE_ID = 40
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+GIT_DIR = os.path.join(BASE_DIR, '.github')
+
 
 APP_NAME = 'edc_sync_data_report'
 
@@ -41,8 +44,6 @@ APP_NAME = 'edc_sync_data_report'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '382#m4^^*i%v29n51k*e42^*%)2!us^or!)-)lvt%3lmgr^df_'
-
-SITE_ID = 40
 
 DEFAULT_STUDY_SITE = 40
 
@@ -127,7 +128,7 @@ WSGI_APPLICATION = 'edc_sync_data_report.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -179,12 +180,12 @@ SLACK_API_TOKEN = ""
 
 SYNC_ADMINS = ['tshepiso.setsiba@outlook.com']
 
-EMAIL_BACKEND = config['email_conf'].get('email_backend')
-EMAIL_HOST = config['email_conf'].get('email_host')
-EMAIL_USE_TLS = config['email_conf'].get('email_use_tls')
-EMAIL_PORT = config['email_conf'].get('email_port')
-EMAIL_HOST_USER = config['email_conf'].get('email_user')
-EMAIL_HOST_PASSWORD = config['email_conf'].get('email_host_pwd')
+EMAIL_BACKEND = config.get('email_conf', 'email_backend', fallback=None)
+EMAIL_HOST = config.get('email_conf', 'email_host', fallback=None)
+EMAIL_USE_TLS = config.getboolean('email_conf', 'email_use_tls', fallback=None)
+EMAIL_PORT = config.getint('email_conf', 'email_port', fallback=None)
+EMAIL_HOST_USER = config.get('email_conf', 'email_user', fallback=None)
+EMAIL_HOST_PASSWORD = config.get('email_conf', 'email_host_pwd', fallback=None)
 
 Q_CLUSTER = {
     'name': 'edc_sync_report',
@@ -204,7 +205,6 @@ Q_CLUSTER = {
 
 ETC_DIR = os.path.join('/etc/', APP_NAME)
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 # Set DIR to SAVE Reports
 SYNC_REPORTS = '/etc/'
@@ -212,4 +212,15 @@ SYNC_REPORTS = '/etc/'
 # KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 # KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost' ]
+if 'test' in sys.argv:
+
+    class DisableMigrations:
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+    MIGRATION_MODULES = DisableMigrations()
+    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'

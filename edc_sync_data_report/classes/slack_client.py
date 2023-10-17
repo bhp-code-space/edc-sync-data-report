@@ -1,11 +1,9 @@
+from django.conf import settings
 from slack import WebClient
 from slack.errors import SlackApiError
 
-from django.conf import settings
-
 
 class SlakClient:
-
     """
         Send a slack notification to the specified slack channel.
     """
@@ -13,11 +11,7 @@ class SlakClient:
     def send_slack_message(self, message=None):
         client = WebClient(token=settings.SLACK_API_TOKEN)
         try:
-            response = client.chat_postMessage(
-                channel='#sync_monitoring',
-                text=message)
+            response = client.chat_postMessage(channel='#sync_monitoring', text=message)
+            return response
         except SlackApiError as e:
-            # You will get a SlackApiError if "ok" is False
-            assert e.response["ok"] is False
-            assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-            print(f"Got an error: {e.response['error']}")
+            return {"status": "Failed", "message": f"Got an error: {e.response['error']}"}

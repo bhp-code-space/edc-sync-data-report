@@ -3,9 +3,8 @@ from edc_sync_data_report.models import ClientSyncSummary
 
 
 class ClientCollectSummaryData(SummaryData):
-
-    """
-        Build summary data by counting each model records then store in the JSON field. This is useful for project which
+    """Build summary data by counting each model records then store in the JSON field.
+        This is useful for project which
         are very large to build this report data.
     """
 
