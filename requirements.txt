@@ -17,3 +17,4 @@ django-multiselectfield
 djangorestframework
 requests-mock
 slack-sdk
+aiohttp
